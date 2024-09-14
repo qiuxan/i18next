@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Secret Translation on Click</title>
+  <script src="https://unpkg.com/i18next/i18next.min.js"></script>
+</head>
+<body>
+  <div id="translate-section">
+    <p id="welcome">Welcome to our app!</p>
+    <p id="greeting">Hello, how are you?</p>
+    <p id="description">This is a sample sentence for translation.</p>
+  </div>
+  
+  <!-- Trigger Button -->
+  <button id="translate-button">Translate</button>
+
+  <script>
+    // Define the translation dictionary
+    const translations = {
+      en: {
+        translation: {
+          welcome: "Welcome to our app!",
+          greeting: "Hello, how are you?",
+          description: "This is a sample sentence for translation."
+        }
+      },
+      es: {
+        translation: {
+          welcome: "¡Bienvenido a nuestra aplicación!",
+          greeting: "Hola, ¿cómo estás?",
+          description: "Esta es una frase de ejemplo para traducir."
+        }
+      }
+    };
+
+    // Initialize i18next with dictionaries
+    i18next.init({
+      lng: 'en', // Default language
+      resources: translations
+    });
+
+    // Function to translate all text in the specified section
+    function translateText(sectionId, language) {
+      i18next.changeLanguage(language, function(err, t) {
+        const section = document.getElementById(sectionId);
+        section.querySelectorAll("[id]").forEach(function(element) {
+          // Use the element's id to find the correct translation key
+          const translationKey = element.id;
+          const translatedText = i18next.t(translationKey);
+          element.innerHTML = translatedText;
+        });
+      });
+    }
+
+    // Attach an event listener to the button to secretly call translation on click
+    document.getElementById('translate-button').addEventListener('click', function() {
+      // Call the translation function when the button is clicked
+      translateText('translate-section', 'es'); // Translate to Spanish ('es')
+    });
+  </script>
+</body>
+</html>
